@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="woc.bhavye.letsfindit.NewItem">
+
+
+    <EditText
+        android:id="@+id/category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="65dp"
+        android:ems="10"
+        android:hint="Name/Category of Object"
+        android:inputType="textPersonName"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="79dp" />
+
+    <EditText
+        android:id="@+id/object_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/category"
+        android:layout_marginTop="41dp"
+        android:ems="10"
+        android:hint="Describe the object here..."
+        android:inputType="textMultiLine"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="168dp" />
+
+    <Button
+        android:id="@+id/add_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/object_description"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp"
+        android:onClick="onClickLocation"
+        android:text="Add Location"
+        tools:layout_editor_absoluteX="131dp"
+        tools:layout_editor_absoluteY="273dp" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/add_location"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="57dp"
+        android:onClick="onClickSubmit"
+        android:text="submit"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="366dp" />
+
+
+</RelativeLayout>

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "151113544371",
+    "firebase_url": "https://letsfindit-5414c.firebaseio.com",
+    "project_id": "letsfindit-5414c",
+    "storage_bucket": "letsfindit-5414c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:151113544371:android:ddd28e71831c2cb3",
+        "android_client_info": {
+          "package_name": "woc.bhavye.letsfindit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "151113544371-hvva2tg35jndc9538juvm7l2ar9s6brv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "woc.bhavye.letsfindit",
+            "certificate_hash": "453fcf346eddbabdc0a94857e208854d5f05f078"
+          }
+        },
+        {
+          "client_id": "151113544371-00io9565eeihtu6p14390hmunsrqts7s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ47eeU_V83UMBzuBsO2xgO0IBXrJ_tbg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "151113544371-00io9565eeihtu6p14390hmunsrqts7s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
