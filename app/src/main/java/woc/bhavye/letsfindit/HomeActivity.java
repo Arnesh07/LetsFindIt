@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -99,11 +100,13 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     Map<String, String> map = (Map) snap.getValue();
                     String reported = map.get("reported");
-                    if (!(map.get("owner").equals(uid)) && (Boolean.parseBoolean(reported) == false) && (Boolean.parseBoolean(uid) == true)) {
-                        String category = map.get("category");
-                        String description = map.get("description");
-                        String obId = map.get("geofenceRequestId");
-                        lost.add(new String[]{category, description, obId});
+                    if (!TextUtils.isEmpty(map.get("owner"))) {
+                        if (!(map.get("owner").equals(uid)) && (Boolean.parseBoolean(reported) == false) && (Boolean.parseBoolean(uid) == true)) {
+                            String category = map.get("category");
+                            String description = map.get("description");
+                            String obId = map.get("geofenceRequestId");
+                            lost.add(new String[]{category, description, obId});
+                        }
                     }
                 }
                 adapter.notifyDataSetChanged();

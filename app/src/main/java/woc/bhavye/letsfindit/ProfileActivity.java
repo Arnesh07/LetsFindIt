@@ -1,9 +1,9 @@
 package woc.bhavye.letsfindit;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -74,11 +74,13 @@ public class ProfileActivity extends AppCompatActivity {
                 objects.clear();
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
                         Map<String, String> map = (Map) snap.getValue();
-                        if((map.get("owner")).equals(uid) && !Boolean.parseBoolean(map.get("found"))) {
-                            String category = map.get("category");
-                            String description = map.get("description");
-                            String obId = map.get("geofenceRequestId");
-                            objects.add(new String[]{category, description, obId});
+                        if (!TextUtils.isEmpty(map.get("owner"))) {
+                            if ((map.get("owner")).equals(uid) && !Boolean.parseBoolean(map.get("found"))) {
+                                String category = map.get("category");
+                                String description = map.get("description");
+                                String obId = map.get("geofenceRequestId");
+                                objects.add(new String[]{category, description, obId});
+                            }
                         }
                 }
                 adapter.notifyDataSetChanged();
