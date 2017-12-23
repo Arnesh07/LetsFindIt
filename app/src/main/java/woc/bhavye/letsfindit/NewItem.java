@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.SyncStateContract;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -25,16 +26,19 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-public class NewItem extends AppCompatActivity {
+public class NewItem extends AppCompatActivity implements OnCompleteListener<Void>{
 
     EditText editCategory;
     EditText editDescription;
@@ -52,10 +56,16 @@ public class NewItem extends AppCompatActivity {
     FirebaseUser user;
 
     private GeofencingClient mGeofencingClient;
-    
-    Geofence geofence;
 
-    PendingIntent mGeofencePendingIntent;
+    private ArrayList<Geofence> mGeofenceList;
+
+
+    private PendingIntent mGeofencePendingIntent;
+
+    private static final String PACKAGE_NAME = "com.google.android.gms.location.Geofence";
+    static final String GEOFENCES_ADDED_KEY = PACKAGE_NAME + ".GEOFENCES_ADDED_KEY";
+
+    int a=0;
 
 
     private final static int PLACE_PICKER_REQUEST = 1;
@@ -72,6 +82,9 @@ public class NewItem extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
 
         mGeofencingClient = LocationServices.getGeofencingClient(this);
+
+        mGeofenceList = new ArrayList<>();
+        mGeofencePendingIntent = null;
     }
 
 
@@ -113,27 +126,25 @@ public class NewItem extends AppCompatActivity {
         uid = user.getUid();
         objectId = uid.concat(category).concat(Integer.toString(rand.nextInt(100)));
 
-        refOb = database.getReference("object_information").child(objectId);
-        refOb.child("latitude").setValue(Double.toString(location.latitude));
-        refOb.child("longitude").setValue(Double.toString(location.longitude));
-        refOb.child("owner").setValue(uid);
-        refOb.child("category").setValue(category);
-        refOb.child("description").setValue(description);
-        refOb.child("reported").setValue("false");
-        refOb.child("found").setValue("false");
-        refOb.child("geofenceRequestId").setValue(objectId);
-
-        geofence = new Geofence.Builder().setRequestId(objectId)
+        mGeofenceList.add(new Geofence.Builder().setRequestId(objectId)
                 .setCircularRegion(location.latitude, location.longitude, GEOFENCE_RADIUS)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build();
+                .build());
 
         addGeofences();
 
-        Intent intent = new Intent(NewItem.this, ProfileActivity.class);
-        startActivity(intent);
+            refOb = database.getReference("object_information").child(objectId);
+            refOb.child("latitude").setValue(Double.toString(location.latitude));
+            refOb.child("longitude").setValue(Double.toString(location.longitude));
+            refOb.child("owner").setValue(uid);
+            refOb.child("category").setValue(category);
+            refOb.child("description").setValue(description);
+            refOb.child("reported").setValue("false");
+            refOb.child("found").setValue("false");
+            refOb.child("geofenceRequestId").setValue(objectId);
+
     }
 
     @SuppressWarnings("MissingPermission")
@@ -143,19 +154,7 @@ public class NewItem extends AppCompatActivity {
             return;
         }
 
-        mGeofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent())
-                .addOnSuccessListener(this, new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "object successfully posted1", Toast.LENGTH_LONG).show();
-                    }
-                })
-                .addOnFailureListener(this, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "failed to add object", Toast.LENGTH_LONG).show();
-                    }
-                });
+        mGeofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent()).addOnCompleteListener(this);
     }
 
     private boolean checkPermissions() {
@@ -164,10 +163,25 @@ public class NewItem extends AppCompatActivity {
         return permissionState == PackageManager.PERMISSION_GRANTED;
     }
 
+    @Override
+    public void onComplete(@NonNull Task<Void> task) {
+        if (task.isSuccessful()) {
+            updateGeofencesAdded(!getGeofencesAdded());
+            refOb.child("geofence_added").setValue("true");
+            mGeofenceList.clear();
+        } else {
+            // Get the status code for the error and log it using a user-friendly message.
+            refOb.child("geofence_added").setValue("false");
+            String errorMessage = GeofenceErrorMessages.getErrorString(this, task.getException());
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @NonNull
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
         builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofence(geofence);
+        builder.addGeofences(mGeofenceList);
         return builder.build();
     }
 
@@ -182,5 +196,17 @@ public class NewItem extends AppCompatActivity {
         mGeofencePendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
         return mGeofencePendingIntent;
+    }
+
+    private boolean getGeofencesAdded() {
+        return PreferenceManager.getDefaultSharedPreferences(this).getBoolean(
+                GEOFENCES_ADDED_KEY, false);
+    }
+
+    private void updateGeofencesAdded(boolean added) {
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .edit()
+                .putBoolean(GEOFENCES_ADDED_KEY, added)
+                .apply();
     }
 }

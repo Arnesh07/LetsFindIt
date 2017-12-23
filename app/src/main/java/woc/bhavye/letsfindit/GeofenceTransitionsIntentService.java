@@ -148,12 +148,10 @@ public class GeofenceTransitionsIntentService extends IntentService {
             ValueEventListener listener= new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot snap : dataSnapshot.getChildren()){
-                        Map<String, String> map = (Map) snap.getValue();
-                        if(!(map.get("owner").equals(uid))) {
-                            String category = map.get("category");
-                            double lat = Double.parseDouble(map.get("latitude"));
-                            double longi = Double.parseDouble(map.get("longitude"));
+                        if(!((dataSnapshot.child("owner").getValue().toString()).equals(uid))) {
+                            String category = dataSnapshot.child("category").getValue().toString();
+                            double lat = Double.parseDouble(dataSnapshot.child("latitude").getValue().toString());
+                            double longi = Double.parseDouble(dataSnapshot.child("longitude").getValue().toString());
                             double dist = Math.round(distance(location.getLatitude(), location.getLongitude(), lat,longi));
                             int d = (int) dist;
                             refOb.child("distance").setValue(Integer.toString(d));
@@ -161,7 +159,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
                             sendNotification(notif);
                         }
                         else { refOb.child(uid).setValue("false");}
-                    }
                 }
 
                 @Override

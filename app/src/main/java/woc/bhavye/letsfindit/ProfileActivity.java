@@ -74,7 +74,7 @@ public class ProfileActivity extends AppCompatActivity {
                 objects.clear();
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
                         Map<String, String> map = (Map) snap.getValue();
-                        if(map.get("owner").equals(uid) && !Boolean.parseBoolean(map.get("found"))) {
+                        if((map.get("owner")).equals(uid) && !Boolean.parseBoolean(map.get("found"))) {
                             String category = map.get("category");
                             String description = map.get("description");
                             String obId = map.get("geofenceRequestId");
