@@ -3,16 +3,14 @@ package woc.bhavye.letsfindit;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -73,12 +71,14 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 adapter.clear();
+                objects.clear();
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
                         Map<String, String> map = (Map) snap.getValue();
-                        if(map.get("owner").equals(uid)) {
+                        if(map.get("owner").equals(uid) && !Boolean.parseBoolean(map.get("found"))) {
                             String category = map.get("category");
                             String description = map.get("description");
-                            objects.add(new String[]{category, description});
+                            String obId = map.get("geofenceRequestId");
+                            objects.add(new String[]{category, description, obId});
                         }
                 }
                 adapter.notifyDataSetChanged();
@@ -91,6 +91,15 @@ public class ProfileActivity extends AppCompatActivity {
         };
         mRef.addValueEventListener(listener);
 
+        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String[] obj = objects.get(i);
+                Intent intent = new Intent(ProfileActivity.this, Details.class);
+                intent.putExtra("OBJECT_ID", obj[2]);
+                startActivity(intent);
+            }
+        });
 
     }
 

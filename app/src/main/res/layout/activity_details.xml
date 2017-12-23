@@ -7,20 +7,63 @@
     tools:context="woc.bhavye.letsfindit.Details">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/cat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
+        android:layout_marginTop="51dp"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/des"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textView4"
-        android:layout_below="@+id/textView4"
-        android:layout_marginTop="53dp"
+        android:layout_alignStart="@+id/cat"
+        android:layout_below="@+id/cat"
+        android:layout_marginTop="52dp"
         android:text="TextView" />
+
+    <Button
+        android:id="@+id/showLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="SHOW LOCATION"
+        android:onClick="onClickShowLocation"/>
+
+    <TextView
+        android:id="@+id/reported"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/showLocation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="125dp"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reported"
+        android:layout_marginEnd="12dp"
+        android:layout_marginTop="39dp"
+        android:layout_toStartOf="@+id/des"
+        android:text="Found"
+        android:visibility="invisible"
+        android:onClick="onClickFound"/>
+
+    <Button
+        android:id="@+id/not_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/found"
+        android:layout_marginStart="14dp"
+        android:layout_toEndOf="@+id/des"
+        android:text="NOT FOUND"
+        android:visibility="invisible"
+        android:onClick="onClickNotFound"/>
 </RelativeLayout>
