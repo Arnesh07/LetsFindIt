@@ -173,8 +173,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
     private void geofenceExited(List<Geofence> exitedGeofences) {
         for (Geofence geofence : exitedGeofences) {
             String id = geofence.getRequestId();
-            refOb = database.getReference("object_information").child(id);
-            refOb.child(uid).setValue("false");
+            mRef = database.getReference("object_information").child(id);
+            mRef.child(uid).setValue("false");
         }
     }
 

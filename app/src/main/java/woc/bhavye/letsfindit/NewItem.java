@@ -69,7 +69,7 @@ public class NewItem extends AppCompatActivity implements OnCompleteListener<Voi
 
 
     private final static int PLACE_PICKER_REQUEST = 1;
-    private final static int GEOFENCE_RADIUS = 50;
+    private final static int GEOFENCE_RADIUS = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +169,8 @@ public class NewItem extends AppCompatActivity implements OnCompleteListener<Voi
             updateGeofencesAdded(!getGeofencesAdded());
             refOb.child("geofence_added").setValue("true");
             mGeofenceList.clear();
+            Intent intent = new Intent(NewItem.this, ProfileActivity.class);
+            startActivity(intent);
         } else {
             // Get the status code for the error and log it using a user-friendly message.
             refOb.child("geofence_added").setValue("false");

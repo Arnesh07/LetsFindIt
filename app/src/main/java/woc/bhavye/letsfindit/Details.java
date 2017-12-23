@@ -73,8 +73,7 @@ public class Details extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    Map<String, String> map = (Map) snap.getValue();
-                    String msg = "reported by: \n".concat(map.get("Name")).concat("\n").concat("contact number: ").concat(map.get("Contact"));
+                    String msg = "reported by: \n".concat(dataSnapshot.child("Name").getValue().toString()).concat("\n").concat("contact number: ").concat(dataSnapshot.child("Contact").getValue().toString());
                     rep.setText(msg);
                 }
             }

@@ -67,7 +67,8 @@ public class HomeActivity extends AppCompatActivity {
 
         myList = (ListView) findViewById(R.id.lostNearby);
 
-
+        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
+        startService(intent);
     }
 
     @Override
@@ -99,9 +100,9 @@ public class HomeActivity extends AppCompatActivity {
                 adapter.clear();
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     Map<String, String> map = (Map) snap.getValue();
-                    String reported = map.get("reported");
-                    if (!TextUtils.isEmpty(map.get("owner"))) {
-                        if (!(map.get("owner").equals(uid)) && (Boolean.parseBoolean(reported) == false) && (Boolean.parseBoolean(uid) == true)) {
+                    if (!TextUtils.isEmpty(map.get("owner")) && !TextUtils.isEmpty(map.get(uid))) {
+                        if (!uid.equals(map.get("owner")) && !Boolean.parseBoolean(map.get("reported")) && Boolean.parseBoolean(map.get(uid))) {
+                            Log.v("entered","object");
                             String category = map.get("category");
                             String description = map.get("description");
                             String obId = map.get("geofenceRequestId");
