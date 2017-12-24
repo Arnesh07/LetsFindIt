@@ -47,6 +47,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Intent inten = new Intent(this, GeofenceTransitionsIntentService.class);
+        startService(inten);
+
         mAuth = FirebaseAuth.getInstance();
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -66,9 +69,6 @@ public class HomeActivity extends AppCompatActivity {
         mRef = database.getInstance().getReference("object_information");
 
         myList = (ListView) findViewById(R.id.lostNearby);
-
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-        startService(intent);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity {
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     Map<String, String> map = (Map) snap.getValue();
                     if (!TextUtils.isEmpty(map.get("owner")) && !TextUtils.isEmpty(map.get(uid))) {
-                        if (!uid.equals(map.get("owner")) && !Boolean.parseBoolean(map.get("reported")) && Boolean.parseBoolean(map.get(uid))) {
+                        if ((!uid.equals(map.get("owner")) && Boolean.parseBoolean(map.get(uid))) && (!Boolean.parseBoolean(map.get("reported")) || uid.equals(map.get("reportedby")))) {
                             Log.v("entered","object");
                             String category = map.get("category");
                             String description = map.get("description");

@@ -45,8 +45,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reported"
-        android:layout_marginTop="91dp"
-        android:layout_toStartOf="@+id/cat"
+        android:layout_marginTop="93dp"
+        android:layout_toStartOf="@+id/open_chat"
         android:onClick="onClickFound"
         android:text="Found"
         android:visibility="invisible" />
@@ -57,7 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/found"
         android:layout_alignBottom="@+id/found"
-        android:layout_toEndOf="@+id/reported"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="55dp"
         android:onClick="onClickNotFound"
         android:text="NOT FOUND"
         android:visibility="invisible" />
@@ -66,11 +67,11 @@
         android:id="@+id/open_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/cat"
-        android:layout_below="@+id/not_found"
-        android:layout_marginTop="37dp"
+        android:layout_alignEnd="@+id/des"
+        android:layout_below="@+id/found"
+        android:layout_marginTop="26dp"
+        android:onClick="onClickOpenChat"
         android:text="OPEN CHAT"
         android:textAlignment="center"
-        android:visibility="invisible"
-        android:onClick="onClickOpenChat"/>
+        android:visibility="invisible" />
 </RelativeLayout>

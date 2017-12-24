@@ -3,6 +3,7 @@ package woc.bhavye.letsfindit;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Map;
 
 
 public class Report extends AppCompatActivity {
@@ -28,6 +31,7 @@ public class Report extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private DatabaseReference mRef;
+    private DatabaseReference ref;
 
     private FirebaseUser user;
 
@@ -41,6 +45,9 @@ public class Report extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        uid = user.getUid();
+
         Intent intent = getIntent();
         objectId = intent.getStringExtra("OBJECT_ID");
 
@@ -52,8 +59,6 @@ public class Report extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         mRef = database.getInstance().getReference("object_information").child(objectId);
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
-        uid = user.getUid();
 
         rep = (Button) findViewById(R.id.report);
         textReported = (TextView) findViewById(R.id.textReported);
@@ -64,6 +69,14 @@ public class Report extends AppCompatActivity {
                     text1.setText(dataSnapshot.child("category").getValue().toString());
                     text2.setText(dataSnapshot.child("description").getValue().toString());
                     belongsto = dataSnapshot.child("owner").getValue().toString();
+                Map<String, String> map = (Map) dataSnapshot.getValue();
+                    if(!TextUtils.isEmpty(map.get("reportedby"))) {
+                        if (dataSnapshot.child("reportedby").getValue().toString().equals(uid)) {
+                            rep.setVisibility(View.INVISIBLE);
+                            openChat.setVisibility(View.VISIBLE);
+                            textReported.setVisibility(View.VISIBLE);
+                        }
+                    }
             }
 
             @Override
@@ -83,9 +96,11 @@ public class Report extends AppCompatActivity {
     }
 
     public void openChat(View view) {
+
         String chatID = belongsto.concat(uid);
         Intent intent = new Intent(Report.this, MessageActivity.class);
         intent.putExtra("CHAT_ID", chatID);
+        intent.putExtra("USER_ID", uid);
         startActivity(intent);
     }
 }

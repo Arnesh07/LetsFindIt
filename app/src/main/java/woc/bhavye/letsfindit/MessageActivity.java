@@ -14,6 +14,10 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.firebase.ui.database.FirebaseListOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -31,7 +35,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         chatID = intent.getStringExtra("CHAT_ID");
 
         database = FirebaseDatabase.getInstance();
@@ -42,8 +46,9 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText input = (EditText) findViewById(R.id.input);
+                String name = intent.getStringExtra("USER_ID");
 
-                mRef.push().setValue(new ChatMessage(input.getText().toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
+                mRef.push().setValue(new ChatMessage(input.getText().toString(), name));
 
                 input.setText("");
             }
@@ -51,11 +56,37 @@ public class MessageActivity extends AppCompatActivity {
 
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
-        Query query = mRef.limitToLast(50);
+        Query query = FirebaseDatabase.getInstance().getReference("chats").child(chatID).limitToLast(50);
 
-        FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
-                .setQuery(query, ChatMessage.class)
-                .build();
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // ...
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // ...
+            }
+        };
+        query.addChildEventListener(childEventListener);
+
+        FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>().setQuery(query, ChatMessage.class).setLayout(R.layout.message).build();
 
         adapter = new FirebaseListAdapter<ChatMessage>(options) {
             @Override

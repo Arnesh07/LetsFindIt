@@ -15,7 +15,8 @@
         android:layout_above="@+id/input"
         android:layout_alignParentStart="true"
         android:divider="@android:color/transparent"
-        android:dividerHeight="16dp" />
+        android:dividerHeight="16dp"
+        android:visibility="visible" />
 
     <EditText
         android:id="@+id/input"
@@ -25,7 +26,8 @@
         android:layout_alignParentStart="true"
         android:ems="10"
         android:hint="message..."
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:visibility="visible" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -34,5 +36,6 @@
         android:layout_below="@+id/list_of_messages"
         android:layout_marginStart="21dp"
         android:layout_toEndOf="@+id/input"
+        android:visibility="visible"
         app:srcCompat="@mipmap/ic_launcher" />
 </RelativeLayout>

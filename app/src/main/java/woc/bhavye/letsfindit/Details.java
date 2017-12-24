@@ -27,6 +27,7 @@ public class Details extends AppCompatActivity {
     private FirebaseDatabase database;
     private DatabaseReference mRef;
     private DatabaseReference ref;
+    private DatabaseReference ref2;
 
     private Button found;
     private Button notFound;
@@ -37,16 +38,20 @@ public class Details extends AppCompatActivity {
     FirebaseUser user;
 
     String chatID;
+    String usr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        usr = user.getUid();
+
         Intent intent = getIntent();
         objectId = intent.getStringExtra("OBJECT_ID");
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         cat = (TextView) findViewById(R.id.cat);
         des = (TextView) findViewById(R.id.des);
@@ -99,7 +104,7 @@ public class Details extends AppCompatActivity {
     public void onClickFound(View view){
         mRef.child("found").setValue("true");
         mRef.child("reported").setValue("true");
-        FirebaseDatabase.getInstance().getReference("chats").child(chatID).removeValue();
+        //FirebaseDatabase.getInstance().getReference("chats").child(chatID).removeValue();
         Intent intent = new Intent(Details.this, ProfileActivity.class);
         startActivity(intent);
     }
@@ -113,13 +118,17 @@ public class Details extends AppCompatActivity {
         notFound.setVisibility(View.INVISIBLE);
         openChat.setVisibility(View.INVISIBLE);
         rep.setText("");
-        FirebaseDatabase.getInstance().getReference("chats").child(chatID).removeValue();
+        //FirebaseDatabase.getInstance().getReference("chats").child(chatID).removeValue();
     }
 
     public void onClickOpenChat(View view){
+
         Intent intent = new Intent(Details.this, MessageActivity.class);
         chatID = user.getUid().concat(reportedby);
         intent.putExtra("CHAT_ID", chatID);
+        intent.putExtra("USER_ID", usr);
         startActivity(intent);
     }
+
+
 }
