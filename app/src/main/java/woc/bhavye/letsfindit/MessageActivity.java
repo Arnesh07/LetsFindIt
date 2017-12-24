@@ -56,35 +56,7 @@ public class MessageActivity extends AppCompatActivity {
 
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
-        Query query = FirebaseDatabase.getInstance().getReference("chats").child(chatID).limitToLast(50);
-
-        ChildEventListener childEventListener = new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                // ...
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-                // ...
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                // ...
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-                // ...
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // ...
-            }
-        };
-        query.addChildEventListener(childEventListener);
+        Query query = FirebaseDatabase.getInstance().getReference("chats").child(chatID);
 
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>().setQuery(query, ChatMessage.class).setLayout(R.layout.message).build();
 
@@ -107,6 +79,19 @@ public class MessageActivity extends AppCompatActivity {
         };
 
         listOfMessages.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 
 
