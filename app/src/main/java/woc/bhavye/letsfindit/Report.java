@@ -15,16 +15,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
-import java.util.Map;
 
 public class Report extends AppCompatActivity {
 
     String objectId;
+    String belongsto;
 
     private TextView text1;
     private TextView text2;
+
+    private Button openChat;
 
     private FirebaseDatabase database;
     private DatabaseReference mRef;
@@ -47,6 +47,8 @@ public class Report extends AppCompatActivity {
         text1 = (TextView) findViewById(R.id.text1);
         text2 = (TextView) findViewById(R.id.text2);
 
+        openChat = (Button) findViewById(R.id.openChat);
+
         database = FirebaseDatabase.getInstance();
         mRef = database.getInstance().getReference("object_information").child(objectId);
 
@@ -61,6 +63,7 @@ public class Report extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                     text1.setText(dataSnapshot.child("category").getValue().toString());
                     text2.setText(dataSnapshot.child("description").getValue().toString());
+                    belongsto = dataSnapshot.child("owner").getValue().toString();
             }
 
             @Override
@@ -75,6 +78,14 @@ public class Report extends AppCompatActivity {
         mRef.child("reportedby").setValue(uid);
         mRef.child("reported").setValue("true");
         rep.setVisibility(View.INVISIBLE);
+        openChat.setVisibility(View.VISIBLE);
         textReported.setVisibility(View.VISIBLE);
+    }
+
+    public void openChat(View view) {
+        String chatID = belongsto.concat(uid);
+        Intent intent = new Intent(Report.this, MessageActivity.class);
+        intent.putExtra("CHAT_ID", chatID);
+        startActivity(intent);
     }
 }

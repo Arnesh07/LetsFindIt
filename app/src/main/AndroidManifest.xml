@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="woc.bhavye.letsfindit">
 
     <!--
@@ -34,6 +35,7 @@
         <activity android:name=".Report" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".SignupActivity" />
+        <activity android:name=".MessageActivity"/>
 
         <service
             android:name=".GeofenceTransitionsIntentService"
@@ -48,10 +50,8 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+        <meta-data
+            tools:replace="android:value" />
 
     </application>
 

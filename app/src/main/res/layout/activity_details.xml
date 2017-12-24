@@ -23,27 +23,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/cat"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="55dp"
+        android:layout_marginTop="25dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="24sp" />
-
-    <Button
-        android:id="@+id/showLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="SHOW LOCATION"
-        android:onClick="onClickShowLocation"/>
 
     <TextView
         android:id="@+id/reported"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/showLocation"
+        android:layout_below="@+id/cat"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="89dp"
+        android:text="Not Reported....Yet!"
         android:textAlignment="center"
         android:textSize="18sp"
         android:textStyle="bold" />
@@ -53,21 +45,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reported"
-        android:layout_marginEnd="12dp"
-        android:layout_marginTop="39dp"
-        android:layout_toStartOf="@+id/des"
+        android:layout_marginTop="91dp"
+        android:layout_toStartOf="@+id/cat"
+        android:onClick="onClickFound"
         android:text="Found"
-        android:visibility="invisible"
-        android:onClick="onClickFound"/>
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/not_found"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/found"
         android:layout_alignBottom="@+id/found"
-        android:layout_marginStart="14dp"
-        android:layout_toEndOf="@+id/des"
+        android:layout_toEndOf="@+id/reported"
+        android:onClick="onClickNotFound"
         android:text="NOT FOUND"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/open_chat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/cat"
+        android:layout_below="@+id/not_found"
+        android:layout_marginTop="37dp"
+        android:text="OPEN CHAT"
+        android:textAlignment="center"
         android:visibility="invisible"
-        android:onClick="onClickNotFound"/>
+        android:onClick="onClickOpenChat"/>
 </RelativeLayout>

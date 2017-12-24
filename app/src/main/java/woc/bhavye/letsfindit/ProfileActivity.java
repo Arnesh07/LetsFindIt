@@ -124,7 +124,7 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void addNewObject(View view)
+    public void addNewObject(View view)
     {
         Intent intent = new Intent(ProfileActivity.this, NewItem.class);
         startActivity(intent);
