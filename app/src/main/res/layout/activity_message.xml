@@ -34,5 +34,5 @@
         android:layout_below="@+id/list_of_messages"
         android:layout_marginStart="21dp"
         android:layout_toEndOf="@+id/input"
-        app:srcCompat="@mipmap/ic_send_black_24dp" />
+        app:srcCompat="@mipmap/ic_launcher" />
 </RelativeLayout>
