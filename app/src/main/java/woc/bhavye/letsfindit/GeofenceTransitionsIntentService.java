@@ -81,6 +81,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
             List<Geofence> triggeringGeofencesExit = geofencingEvent.getTriggeringGeofences();
             geofenceExited(triggeringGeofencesExit);
+            Log.e(TAG, "geofence exited");
 
         }
         else {

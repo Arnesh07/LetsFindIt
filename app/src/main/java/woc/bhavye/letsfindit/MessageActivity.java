@@ -70,7 +70,12 @@ public class MessageActivity extends AppCompatActivity {
 
                 // Set their text
                 messageText.setText(model.getMessageText());
-                messageUser.setText(model.getMessageUser());
+                if(model.getMessageUser().equals(intent.getStringExtra("USER_ID"))) {
+                    messageUser.setText("You");
+                }
+                else {
+                    messageUser.setText(model.getMessageUser());
+                }
 
                 // Format the date before showing it
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",

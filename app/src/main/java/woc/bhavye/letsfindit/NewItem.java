@@ -69,7 +69,7 @@ public class NewItem extends AppCompatActivity implements OnCompleteListener<Voi
 
 
     private final static int PLACE_PICKER_REQUEST = 1;
-    private final static int GEOFENCE_RADIUS = 100;
+    private final static int GEOFENCE_RADIUS = 50;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
