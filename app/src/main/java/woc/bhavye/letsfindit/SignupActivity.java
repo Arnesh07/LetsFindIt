@@ -91,7 +91,7 @@ public class SignupActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (!task.isSuccessful()) {
                                 mProgress.dismiss();
-                                Toast.makeText(SignupActivity.this, "Check Email or Password", Toast.LENGTH_LONG).show();
+                                Toast.makeText(SignupActivity.this, "Check Email or Password; Password might be too short!", Toast.LENGTH_LONG).show();
                             }
                             else
                             {

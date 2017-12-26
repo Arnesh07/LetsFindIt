@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -119,21 +120,26 @@ public class NewItem extends AppCompatActivity implements OnCompleteListener<Voi
     {
         category = editCategory.getText().toString();
         description = editDescription.getText().toString();
-        user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Random rand = new Random();
+        if(TextUtils.isEmpty(category) || TextUtils.isEmpty(description) || location == null) {
+            Toast.makeText(NewItem.this, "Fill All Fields!", Toast.LENGTH_LONG).show();
+        }
+        else {
+            user = FirebaseAuth.getInstance().getCurrentUser();
 
-        uid = user.getUid();
-        objectId = uid.concat(category).concat(Integer.toString(rand.nextInt(100)));
+            Random rand = new Random();
 
-        mGeofenceList.add(new Geofence.Builder().setRequestId(objectId)
-                .setCircularRegion(location.latitude, location.longitude, GEOFENCE_RADIUS)
-                .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
-                .build());
+            uid = user.getUid();
+            objectId = uid.concat(category).concat(Integer.toString(rand.nextInt(100)));
 
-        addGeofences();
+            mGeofenceList.add(new Geofence.Builder().setRequestId(objectId)
+                    .setCircularRegion(location.latitude, location.longitude, GEOFENCE_RADIUS)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+
+            addGeofences();
 
             refOb = database.getReference("object_information").child(objectId);
             refOb.child("latitude").setValue(Double.toString(location.latitude));
@@ -144,7 +150,7 @@ public class NewItem extends AppCompatActivity implements OnCompleteListener<Voi
             refOb.child("reported").setValue("false");
             refOb.child("found").setValue("false");
             refOb.child("geofenceRequestId").setValue(objectId);
-
+        }
     }
 
     @SuppressWarnings("MissingPermission")

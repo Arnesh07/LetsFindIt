@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
 
         database = FirebaseDatabase.getInstance();
         mRef = database.getInstance().getReference("object_information");
+        mRef.child("show_all").child(uid).setValue("false");
 
         myList = (ListView) findViewById(R.id.lostNearby);
     }
@@ -93,20 +94,32 @@ public class HomeActivity extends AppCompatActivity {
 
         myList.setAdapter(adapter);
 
-        ValueEventListener listener = new ValueEventListener() {
+        final ValueEventListener listener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 lost.clear();
                 adapter.clear();
                 for (DataSnapshot snap : dataSnapshot.getChildren()) {
                     Map<String, String> map = (Map) snap.getValue();
-                    if (!TextUtils.isEmpty(map.get("owner")) && !TextUtils.isEmpty(map.get(uid))) {
-                        if ((!uid.equals(map.get("owner")) && Boolean.parseBoolean(map.get(uid))) && (!Boolean.parseBoolean(map.get("reported")) || uid.equals(map.get("reportedby")))) {
-                            Log.v("entered","object");
-                            String category = map.get("category");
-                            String description = map.get("description");
-                            String obId = map.get("geofenceRequestId");
-                            lost.add(new String[]{category, description, obId});
+                    boolean superCond = !TextUtils.isEmpty(map.get("owner")) && !TextUtils.isEmpty(map.get(uid));
+                    if (superCond) {
+                        boolean condShowLess = (!uid.equals(map.get("owner")) && Boolean.parseBoolean(map.get(uid))) && (!Boolean.parseBoolean(map.get("reported")) || uid.equals(map.get("reportedby")));
+                        boolean condShowAll = (!uid.equals(map.get("owner")) && (!Boolean.parseBoolean(map.get("reported")) || uid.equals(map.get("reportedby"))));
+                        if (Boolean.parseBoolean(dataSnapshot.child("show_all").getValue().toString())) {
+                            if(condShowAll) {
+                                Log.v("entered", "object");
+                                String category = map.get("category");
+                                String description = map.get("description");
+                                String obId = map.get("geofenceRequestId");
+                                lost.add(new String[]{category, description, obId});
+                            }
+                            else if(condShowLess) {
+                                Log.v("entered", "object");
+                                String category = map.get("category");
+                                String description = map.get("description");
+                                String obId = map.get("geofenceRequestId");
+                                lost.add(new String[]{category, description, obId});
+                            }
                         }
                     }
                 }
@@ -156,7 +169,14 @@ public class HomeActivity extends AppCompatActivity {
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     if (item.getItemId() == R.id.settings) {
-
+                        if(item.getTitle().equals("Show All")) {
+                            item.setTitle("Show Less");
+                            mRef.child("show_all").child(uid).setValue("true");
+                        }
+                        else {
+                            item.setTitle("Show All");
+                            mRef.child("show_all").child(uid).setValue("false");
+                        }
                     }
 
                     if (item.getItemId() == R.id.logout) {
