@@ -177,6 +177,7 @@ public class NewItem extends AppCompatActivity implements OnCompleteListener<Voi
             mGeofenceList.clear();
             Intent intent = new Intent(NewItem.this, ProfileActivity.class);
             startActivity(intent);
+            this.finish();
         } else {
             // Get the status code for the error and log it using a user-friendly message.
             refOb.child("geofence_added").setValue("false");

@@ -158,6 +158,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.action_ac) {
             startActivity(new Intent(HomeActivity.this, ProfileActivity.class));
+            this.finish();
         }
 
         if (item.getItemId() == R.id.options) {

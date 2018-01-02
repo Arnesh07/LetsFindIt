@@ -128,5 +128,6 @@ public class ProfileActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(ProfileActivity.this, NewItem.class);
         startActivity(intent);
+        this.finish();
     }
 }
