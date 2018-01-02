@@ -46,6 +46,7 @@ public class SignupActivity extends AppCompatActivity {
         editName = (EditText) findViewById(R.id.name);
         editPassword = (EditText) findViewById(R.id.password);
 
+
         mAuth = FirebaseAuth.getInstance();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
