@@ -35,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseUser user;
 
+    private boolean showAll;
+
     String uid;
 
     private FirebaseDatabase database;
@@ -70,6 +72,8 @@ public class HomeActivity extends AppCompatActivity {
         mRef.child("show_all").child(uid).setValue("false");
 
         myList = (ListView) findViewById(R.id.lostNearby);
+
+        showAll = false;
     }
 
     @Override
@@ -164,18 +168,22 @@ public class HomeActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.options) {
             View menuItemView = findViewById(R.id.options);
             PopupMenu popup = new PopupMenu(HomeActivity.this, menuItemView);
-            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+            if(showAll) {
+                popup.getMenuInflater().inflate(R.menu.popup_menu2, popup.getMenu());
+            } else {
+                popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+            }
 
             //registering popup with OnMenuItemClickListener
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     if (item.getItemId() == R.id.settings) {
                         if(item.getTitle().equals("Show All")) {
-                            item.setTitle("Show Less");
+                            showAll = true;
                             mRef.child("show_all").child(uid).setValue("true");
                         }
                         else {
-                            item.setTitle("Show All");
+                            showAll = false;
                             mRef.child("show_all").child(uid).setValue("false");
                         }
                     }
