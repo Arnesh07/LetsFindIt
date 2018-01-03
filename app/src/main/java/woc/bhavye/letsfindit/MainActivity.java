@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     mProgress.dismiss();
                     startActivity(intent);
+                    finish();
                 }
 
             }

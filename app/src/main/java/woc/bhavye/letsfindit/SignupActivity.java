@@ -55,6 +55,7 @@ public class SignupActivity extends AppCompatActivity {
                 if(firebaseAuth.getCurrentUser()!=null){
                     Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         };
