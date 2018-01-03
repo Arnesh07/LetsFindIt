@@ -170,30 +170,38 @@ public class HomeActivity extends AppCompatActivity {
             PopupMenu popup = new PopupMenu(HomeActivity.this, menuItemView);
             if(showAll) {
                 popup.getMenuInflater().inflate(R.menu.popup_menu2, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.settings2) {
+                                showAll = false;
+                                mRef.child("show_all").child(uid).setValue("false");
+                        }
+
+                        if (item.getItemId() == R.id.logout2) {
+                            FirebaseAuth.getInstance().signOut();
+                        }
+                        return true;
+                    }
+                });
             } else {
                 popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.settings) {
+                                showAll = true;
+                                mRef.child("show_all").child(uid).setValue("true");
+                        }
+
+                        if (item.getItemId() == R.id.logout) {
+                            FirebaseAuth.getInstance().signOut();
+                        }
+                        return true;
+                    }
+                });
             }
 
             //registering popup with OnMenuItemClickListener
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    if (item.getItemId() == R.id.settings) {
-                        if(item.getTitle().equals("Show All")) {
-                            showAll = true;
-                            mRef.child("show_all").child(uid).setValue("true");
-                        }
-                        else {
-                            showAll = false;
-                            mRef.child("show_all").child(uid).setValue("false");
-                        }
-                    }
 
-                    if (item.getItemId() == R.id.logout) {
-                        FirebaseAuth.getInstance().signOut();
-                    }
-                    return true;
-                }
-            });
 
             popup.show();
         }
